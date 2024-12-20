@@ -2,11 +2,34 @@
 
 const SIZE = 9;
 const board = [];
+let selectedNumber = null;
 
 window.onload = () => {
+    createNumberPad();
     createBoard();
     document.getElementById('solve-button').addEventListener('click', solveSudoku);
+    document.getElementById('reset-button').addEventListener('click', resetBoard);
 };
+
+function createNumberPad() {
+    const numberPad = document.getElementById('number-pad');
+    const numbers = numberPad.querySelectorAll('.number');
+
+    numbers.forEach(number => {
+        number.addEventListener('click', () => {
+            // Deselect all numbers
+            numbers.forEach(num => num.classList.remove('selected'));
+
+            // Select the clicked number
+            if (number.dataset.number !== '0') {
+                number.classList.add('selected');
+                selectedNumber = number.dataset.number;
+            } else {
+                selectedNumber = null;
+            }
+        });
+    });
+}
 
 function createBoard() {
     const boardContainer = document.getElementById('sudoku-board');
@@ -14,31 +37,32 @@ function createBoard() {
     for (let row = 0; row < SIZE; row++) {
         board[row] = [];
         for (let col = 0; col < SIZE; col++) {
-            const cell = document.createElement('input');
-            cell.type = 'number';
-            cell.min = 1;
-            cell.max = 9;
-            cell.dataset.row = row;
-            cell.dataset.col = col;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.readOnly = true; // Prevent manual typing
+            input.dataset.row = row;
+            input.dataset.col = col;
 
-            cell.addEventListener('input', handleInput);
-            cell.addEventListener('focus', removeConflictClass);
+            input.addEventListener('click', handleCellClick);
 
-            board[row][col] = cell;
-            boardContainer.appendChild(cell);
+            board[row][col] = input;
+            boardContainer.appendChild(input);
         }
     }
 }
 
-function handleInput(e) {
+function handleCellClick(e) {
     const input = e.target;
-    let value = parseInt(input.value);
+    const row = input.dataset.row;
+    const col = input.dataset.col;
 
-    if (isNaN(value) || value < 1 || value > 9) {
+    if (selectedNumber !== null) {
+        // Update the cell value
+        input.value = selectedNumber;
+    } else {
+        // Erase the cell value
         input.value = '';
-        value = null;
     }
-
     checkConflicts();
 }
 
@@ -220,4 +244,21 @@ function isSafe(grid, row, col, num) {
     }
 
     return true;
+}
+
+function resetBoard() {
+    for (let row of board) {
+        for (let cell of row) {
+            cell.value = '';
+            cell.classList.remove('conflict');
+        }
+    }
+    removeConflictClass();
+    selectedNumber = null;
+
+    // Deselect any selected number
+    const numbers = document.querySelectorAll('.number');
+    numbers.forEach(num => num.classList.remove('selected'));
+
+    displayMessage('Board reset.', false);
 }

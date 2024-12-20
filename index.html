@@ -7,8 +7,29 @@
 </head>
 <body>
     <h1>Sudoku Solver</h1>
-    <div id="sudoku-board"></div>
-    <button id="solve-button">Solve</button>
+    <div id="container">
+        <!-- Number Pad -->
+        <div id="number-pad">
+            <div class="number" data-number="1">1</div>
+            <div class="number" data-number="2">2</div>
+            <div class="number" data-number="3">3</div>
+            <div class="number" data-number="4">4</div>
+            <div class="number" data-number="5">5</div>
+            <div class="number" data-number="6">6</div>
+            <div class="number" data-number="7">7</div>
+            <div class="number" data-number="8">8</div>
+            <div class="number" data-number="9">9</div>
+            <div class="number" data-number="0">Erase</div>
+        </div>
+        <!-- Sudoku Board -->
+        <div id="sudoku-board"></div>
+    </div>
+    <!-- Controls -->
+    <div>
+        <button id="solve-button">Solve</button>
+        <button id="reset-button">Reset</button>
+    </div>
+    <!-- Message Display -->
     <div id="message"></div>
 
     <script src="script.js"></script>
