@@ -1,0 +1,82 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #fafafa;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+#sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 50px);
+    grid-template-rows: repeat(9, 50px);
+    gap: 1px;
+    justify-content: center;
+    margin: 20px auto;
+    background-color: #333;
+}
+
+#sudoku-board input {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+    text-align: center;
+    border: none;
+}
+
+#sudoku-board input:focus {
+    outline: 2px solid #007BFF;
+}
+
+#sudoku-board input.conflict {
+    background-color: #ffcccc;
+}
+
+#solve-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#message {
+    margin-top: 15px;
+    font-weight: bold;
+    color: red;
+}
+
+/* Bold borders for 3x3 subgrids */
+#sudoku-board input {
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+#sudoku-board input:nth-child(9n+1) {
+    border-left: 2px solid #000;
+}
+
+#sudoku-board input:nth-child(n+1):nth-child(-n+9) {
+    border-top: 2px solid #000;
+}
+
+#sudoku-board input:nth-child(9n) {
+    border-right: 2px solid #000;
+}
+
+#sudoku-board input:nth-child(n+73):nth-child(-n+81) {
+    border-bottom: 2px solid #000;
+}
+
+#sudoku-board input:nth-child(27n+1),
+#sudoku-board input:nth-child(27n+10),
+#sudoku-board input:nth-child(27n+19) {
+    border-left: 2px solid #000;
+}
+
+#sudoku-board input:nth-child(n+19):nth-child(-n+27),
+#sudoku-board input:nth-child(n+46):nth-child(-n+54) {
+    border-bottom: 2px solid #000;
+}
