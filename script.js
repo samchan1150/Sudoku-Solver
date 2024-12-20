@@ -150,39 +150,29 @@ function solveSudoku() {
         return;
     }
 
-    if (sudokuSolver(grid)) {
+    const startTime = Date.now();
+    const timeLimit = 100; // in milliseconds
+    let timeoutExceeded = false;
+
+    if (sudokuSolver(grid, startTime, timeLimit)) {
         setBoardValues(grid);
         displayMessage('Sudoku solved successfully!', false);
+    } else if (timeoutExceeded) {
+        displayMessage('No solution found within 100ms.', true);
     } else {
-        displayMessage('No solution exists for the given Sudoku.');
+        displayMessage('No solution exists for the given Sudoku.', true);
     }
 }
 
-function hasConflicts() {
-    for (let row of board) {
-        for (let cell of row) {
-            if (cell.classList.contains('conflict')) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+let timeoutExceeded = false;
 
-function isValidBoard(grid) {
-    // Check for any invalid numbers (should be between 1 and 9 or 0)
-    for (let row = 0; row < SIZE; row++) {
-        for (let col = 0; col < SIZE; col++) {
-            const num = grid[row][col];
-            if (num < 0 || num > 9) {
-                return false;
-            }
-        }
+function sudokuSolver(grid, startTime, timeLimit) {
+    // Check if time limit exceeded
+    if (Date.now() - startTime > timeLimit) {
+        timeoutExceeded = true;
+        return false;
     }
-    return true;
-}
 
-function sudokuSolver(grid) {
     const emptySpot = findEmpty(grid);
 
     if (!emptySpot) {
@@ -195,7 +185,7 @@ function sudokuSolver(grid) {
         if (isSafe(grid, row, col, num)) {
             grid[row][col] = num;
 
-            if (sudokuSolver(grid)) {
+            if (sudokuSolver(grid, startTime, timeLimit)) {
                 return true;
             }
 
@@ -243,6 +233,30 @@ function isSafe(grid, row, col, num) {
         }
     }
 
+    return true;
+}
+
+function hasConflicts() {
+    for (let row of board) {
+        for (let cell of row) {
+            if (cell.classList.contains('conflict')) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function isValidBoard(grid) {
+    // Check for any invalid numbers (should be between 1 and 9 or 0)
+    for (let row = 0; row < SIZE; row++) {
+        for (let col = 0; col < SIZE; col++) {
+            const num = grid[row][col];
+            if (num < 0 || num > 9) {
+                return false;
+            }
+        }
+    }
     return true;
 }
 
